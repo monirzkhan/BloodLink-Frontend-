@@ -58,7 +58,7 @@ export function LoginForm({
         onError: (err) => {
           toast.add({
             type: "error",
-            title: "Login Failed" ,
+            title: "Login Failed",
             description: "Please check your email and password and try again.",
           });
         },
@@ -152,17 +152,14 @@ export function LoginForm({
 
         <Field>
           <Button disabled={loginPending} type="submit">
-            {
-              loginPending? 
+            {loginPending ? (
               <>
-              <Spinner/> Submitting
-              </>:
-              <>
-              Login
+                <Spinner /> Submitting
               </>
-            }
-            
-            </Button>
+            ) : (
+              <>Login</>
+            )}
+          </Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
