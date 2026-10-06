@@ -16,12 +16,21 @@ import { useForm } from "@tanstack/react-form";
 import { loginSchema } from "@/validations";
 import { useState } from "react";
 import { Eye, EyeClosedIcon } from "lucide-react";
+import { useLogin } from "@/hooks";
+import { useRouter } from "next/navigation";
+import { toast } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const [showPassword, setShowPassword] = useState(false);
+
+  const router = useRouter();
+
+  const { mutate: login, isPending: loginPending } = useLogin();
+
   const form = useForm({
     defaultValues: {
       email: "odvutkabbo@gmail.com",
@@ -31,7 +40,29 @@ export function LoginForm({
       onSubmit: loginSchema,
     },
     onSubmit: ({ value }) => {
-      console.log(value);
+      const loginData = {
+        email: value.email,
+        password: value.password,
+      };
+
+      login(loginData, {
+        onSuccess: (res) => {
+          toast.add({
+            type: "success",
+            title: "Login Successful",
+            description: "Welcome back! You have successfully logged in.",
+          });
+          router.push("/");
+          console.log(res);
+        },
+        onError: (err) => {
+          toast.add({
+            type: "error",
+            title: "Login Failed" ,
+            description: "Please check your email and password and try again.",
+          });
+        },
+      });
     },
   });
   return (
@@ -120,7 +151,18 @@ export function LoginForm({
         </form.Field>
 
         <Field>
-          <Button type="submit">Login</Button>
+          <Button disabled={loginPending} type="submit">
+            {
+              loginPending? 
+              <>
+              <Spinner/> Submitting
+              </>:
+              <>
+              Login
+              </>
+            }
+            
+            </Button>
         </Field>
         <FieldSeparator>Or continue with</FieldSeparator>
         <Field>
