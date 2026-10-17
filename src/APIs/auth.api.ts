@@ -12,6 +12,10 @@ export const userGetMe = () => {
   return apiClient("/auth/me");
 };
 
+export const userRegister = (payload: { email: string; password: string }) => {
+  return apiClient("/auth/register", { method: "POST", body: payload });
+};
+
 export const userGoogleLogin = (payload: { idToken: string }) => {
   return apiClient("/auth/google-login", { method: "POST", body: payload });
 };
