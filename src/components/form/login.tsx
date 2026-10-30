@@ -104,7 +104,9 @@ export function LoginForm({
             description:
               "Invalid email or password. Please verify and try again.",
           });
+          console.log(_err);
         },
+        
       });
     },
   });
